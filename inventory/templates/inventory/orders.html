@@ -1,0 +1,56 @@
+{% extends 'inventory/base.html' %}
+{% block title %}{{ title }} {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Ordered Product</th>
+            <th scope="col">Created by</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Order Date</th>
+          </tr>
+        </thead>
+        {% if user.is_staff and user.is_superuser %}
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.product }}</td>
+            <td>{{ order.created_by.username }}</td>
+            <td>{{ order.order_quantity }}</td>
+            <td>{{ order.date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% else %}
+        <tbody>
+          {% for order in orders %}
+          {% if user.username == order.created_by.username %}
+          <tr>
+            <td>{{ order.product }}</td>
+            <td>{{ order.created_by.username }}</td>
+            <td>{{ order.order_quantity }}</td>
+            <td>{{ order.date }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+        {% endif %}
+      </table>
+    </div>
+    <div class="col-md-4">
+      <form method="POST">
+        <h4>Create a New Order</h4>
+        <hr>
+        {% csrf_token %}
+        {{ form|crispy}}
+        <br>
+        <button type="submit" class="btn btn-primary">Create Order</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

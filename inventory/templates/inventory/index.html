@@ -1,0 +1,178 @@
+{% extends 'inventory/base.html' %}
+{% block title %}{{ home }} {% endblock %}
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff and user.is_superuser %}
+<div class="container my-4">
+    <div class="row align-items-start">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Statistics</h1>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <h4>Registered Users</h4>
+
+                                <h3><span class="badge bg-primary rounded-pill">{{ count_users }}</span></h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <h4>Total Orders</h4>
+                                <h3><span class="badge bg-primary rounded-pill">{{ count_orders }}</span></h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <h4>All Products <i class="fa-thin fa-users"></i></h4>
+                                <h3><span class="badge bg-primary rounded-pill">{{ count_products }}</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container my-4">
+    <div class="row align-items-start">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Users</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">User Name</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.last_name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a class="nav-link text-primary active" aria-current="page" href="{% url 'users' %}">View All
+                        Staff</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Orders</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders_adm %}
+                            <tr>
+
+                                <td>{{ order.product }}</td>
+                                <td>{{ order.order_quantity }}</td>
+                                <td>{{ order.date.date }}</td>
+                            </tr>
+                            {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                    <a class="nav-link text-primary active" aria-current="page" href="{% url 'orders' %}">Go to
+                        Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Products</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.quantity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a class="nav-link text-primary active" aria-current="page" href="{% url 'products' %}">Go to
+                        Products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% else %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-center">Make an Order</h4>
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-info" href="{% url 'orders' %}">Create Order</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-center">Here is a list of your Orders</h4>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Ordered Product</th>
+                        <th scope="col">Created by</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    {% if order.created_by.username == user.username %}
+                    <tr>
+                        <td>{{ order.product }}</td>
+                        <td>{{ order.created_by.username }}</td>
+                        <td>{{ order.order_quantity }}</td>
+                        <td>{{ order.date }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

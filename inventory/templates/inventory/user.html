@@ -1,0 +1,53 @@
+{% extends 'inventory/base.html' %}
+{% block title %}{{ profile }} {% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row align-items-start">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">User's Profile</h1>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card text-center p-3">
+                                <h4>Profile Information</h4>
+                                <br>
+                                <table class="table bg-white table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="col">User Name</th>
+                                            <td scope="col">{{ user.username }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Full Name</th>
+                                            <td scope="col">{{ user.first_name }} {{user.last_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Email</th>
+                                            <td>{{ user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Phone</th>
+                                            <td>{{ user.userprofile.mobile }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Address</th>
+                                            <td>{{ user.userprofile.physical_address }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <img style="border-radius: 50%; width: auto; height: auto;" class="img-thumbnail" src="{{ user.userprofile.picture.url }}" alt="profile picture">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
